@@ -20,6 +20,7 @@ library("doMC")
 library("NMF")
 library("gridExtra")
 library("futile.logger")
+library("spatstat")
 registerDoMC(4)
 
 flog.threshold(DEBUG, name='server')
@@ -32,7 +33,7 @@ synapseLogin()
 flog.debug("Starting App...", name="server")
 
 flog.debug("Loading module...", name="server")
-#source("drugScreenModule.R")
+
 source_https <- function(url, ...) {
   # load package
   require(RCurl)
@@ -45,5 +46,7 @@ source_https <- function(url, ...) {
 
 source_https("https://raw.githubusercontent.com/Sage-Bionetworks/shinyModules/master/drugScreen/drugScreenModule.R")
 
+
 flog.debug("Loading data...", name="server")
 source("getData.R")
+
