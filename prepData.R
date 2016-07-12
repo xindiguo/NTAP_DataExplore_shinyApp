@@ -15,17 +15,18 @@ vals <- apply(dfiles,1,function(x){
   tissue <- x["entity.tissueSubtype"]
   res <- read.csv(synGet(synId)@filePath, stringsAsFactors = FALSE)
   if('CCLASS2'%in%colnames(res)){
-    res <- rename(res,c("CCLASS2" = "CRC"))
+    res <- plyr::rename(res,c("CCLASS2" = "CRC"))
   }
   if('Cell.Line'%in%colnames(res)){
-    res <- rename(res,c("Cell.Line" = "Cell.line"))
+    res <- plyr::rename(res,c("Cell.Line" = "Cell.line"))
   }
-  if(tissue == "HFF"){
-    res$Cell.line <- "HFF"
-  }
-  if(tissue == "MTC"){
-    res$Cell.line <- "MTC"
-  }
+#   if(tissue == "HFF"){
+#     res$Cell.line <- "HFF"
+#   }
+#   if(tissue == "MTC"){
+#     res$Cell.line <- "MTC"
+#   }
+  res$Cell.line <- tissue
   res <- res[,c("Cell.line","name","target","CRC","LAC50","MAXR","TAUC","FAUC",
                 "DATA0","DATA1","DATA2","DATA3","DATA4","DATA5","DATA6", 
                 "DATA7", "DATA8","DATA9","DATA10","C0","C1","C2","C3","C4",
@@ -60,6 +61,7 @@ vals <- apply(df2,1,function(drug.dat){
   return(df)
 })
 
+df2 <- do.call(rbind,vals)
 
 write.table(df1, "test/ntap_summarized_data.tsv",row.names = FALSE, sep = "\t",na = "")
 write.table(df2, "test/ntap_raw_data.tsv",row.names = FALSE, sep = "\t",na = "")
